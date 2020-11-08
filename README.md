@@ -28,7 +28,7 @@ HR Task to control the employees and manage their data, Where you can assign tas
   * We have three roles: Admin, Manager, Employee
   * Note: When we Add a new User and choose a Manager for him, in this step we give the _Manager_ role to the manager user if he does not have it.
 
-# Note You can find the backup of the Database on the _HR.Database_ inside the Database Project
+  * Note You can find the backup of the Database on the _HR.Database_ inside the Database Project
 
 # Contact me 
  * Linked In: https://www.linkedin.com/in/amsfci/
