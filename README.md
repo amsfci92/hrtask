@@ -1,7 +1,7 @@
 # HR System Task
 HR Task to control the employees and manage their data, Where you can assign tasks for the Employees, track their work and check the tasks statuses in addition to create many Users.
 
-# Project Strucure 
+# Project Structure 
  * Presentation Layer: has all controllers and the designs that displayed to the user
  * BLL (Business Logic Layer): contains the logic of the project.
  * DAL (Data Acess Layer): All the Data Access processes like the EDMX or the Unit of work
@@ -19,7 +19,7 @@ HR Task to control the employees and manage their data, Where you can assign tas
  * AutoMapper: Mapping the object easily
  * Unity: for the DI (Dependancy Injection)
  
-# Useing Details 
+# Using Details 
 
   * Admin Login Details: 
       Email:     _admin@sahab.com_
