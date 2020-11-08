@@ -1,0 +1,86 @@
+11/8/2020 8:57:16 PM	This log contains information about the import schema operation into project 'HR.Database' on computer 'ALI-SHEHATA' by user 'ali.shehata'.
+11/8/2020 8:57:16 PM	Import of database schema has started.
+11/8/2020 8:57:22 PM	Gathering database credentials
+11/8/2020 8:57:22 PM	Gathering database options
+11/8/2020 8:57:22 PM	Gathering generic database scoped configuration option
+11/8/2020 8:57:22 PM	Gathering users
+11/8/2020 8:57:22 PM	Gathering roles
+11/8/2020 8:57:22 PM	Gathering application roles
+11/8/2020 8:57:22 PM	Gathering role memberships
+11/8/2020 8:57:22 PM	Gathering filegroups
+11/8/2020 8:57:22 PM	Gathering full-text catalogs
+11/8/2020 8:57:22 PM	Gathering assemblies
+11/8/2020 8:57:22 PM	Gathering certificates
+11/8/2020 8:57:22 PM	Gathering asymmetric keys
+11/8/2020 8:57:22 PM	Gathering symmetric keys
+11/8/2020 8:57:22 PM	Gathering encrypted symmetric keys
+11/8/2020 8:57:22 PM	Gathering schemas
+11/8/2020 8:57:22 PM	Gathering XML schema collections
+11/8/2020 8:57:22 PM	Gathering user-defined data types
+11/8/2020 8:57:22 PM	Gathering user-defined types
+11/8/2020 8:57:22 PM	Gathering table types
+11/8/2020 8:57:22 PM	Gathering unique keys for table types
+11/8/2020 8:57:22 PM	Gathering primary keys for table types
+11/8/2020 8:57:22 PM	Gathering indexes for table types
+11/8/2020 8:57:23 PM	Gathering check constraints for table types
+11/8/2020 8:57:23 PM	Gathering default constraints for table types
+11/8/2020 8:57:23 PM	Gathering partition functions
+11/8/2020 8:57:23 PM	Gathering partition schemes
+11/8/2020 8:57:23 PM	Gathering functions
+11/8/2020 8:57:23 PM	Gathering encrypted functions
+11/8/2020 8:57:23 PM	Gathering aggregates
+11/8/2020 8:57:23 PM	Gathering procedures
+11/8/2020 8:57:23 PM	Gathering encrypted procedures
+11/8/2020 8:57:23 PM	Gathering tables
+11/8/2020 8:57:23 PM	Gathering primary keys
+11/8/2020 8:57:23 PM	Gathering unique constraints
+11/8/2020 8:57:23 PM	Gathering foreign keys
+11/8/2020 8:57:23 PM	Gathering default constraints
+11/8/2020 8:57:23 PM	Gathering check constraints
+11/8/2020 8:57:23 PM	Gathering views
+11/8/2020 8:57:23 PM	Gathering encrypted views
+11/8/2020 8:57:23 PM	Gathering indexes
+11/8/2020 8:57:23 PM	Gathering statistics
+11/8/2020 8:57:23 PM	Gathering full-text index stoplists
+11/8/2020 8:57:23 PM	Gathering search property lists
+11/8/2020 8:57:23 PM	Gathering search properties
+11/8/2020 8:57:23 PM	Gathering full-text indexes
+11/8/2020 8:57:23 PM	Gathering column store indexes
+11/8/2020 8:57:23 PM	Gathering spatial indexes
+11/8/2020 8:57:23 PM	Gathering XML indexes
+11/8/2020 8:57:23 PM	Gathering Selective XML indexes
+11/8/2020 8:57:24 PM	Gathering encrypted triggers
+11/8/2020 8:57:24 PM	Gathering triggers
+11/8/2020 8:57:24 PM	Gathering encrypted and clr ddl triggers
+11/8/2020 8:57:24 PM	Gathering ddl triggers
+11/8/2020 8:57:24 PM	Creating edge constraints
+11/8/2020 8:57:24 PM	Gathering synonyms
+11/8/2020 8:57:24 PM	Gathering defaults
+11/8/2020 8:57:24 PM	Gathering data constraint uddt bindings
+11/8/2020 8:57:24 PM	Gathering rules
+11/8/2020 8:57:24 PM	Gathering data constraint uddt bindings
+11/8/2020 8:57:24 PM	Gathering message types
+11/8/2020 8:57:24 PM	Gathering queues
+11/8/2020 8:57:24 PM	Gathering contracts
+11/8/2020 8:57:24 PM	Gathering services
+11/8/2020 8:57:24 PM	Gathering event notifications
+11/8/2020 8:57:24 PM	Gathering remote service bindings
+11/8/2020 8:57:24 PM	Gathering broker priorities
+11/8/2020 8:57:24 PM	Gathering signatures
+11/8/2020 8:57:24 PM	Gathering data compression options
+11/8/2020 8:57:24 PM	Gathering sequence types
+11/8/2020 8:57:24 PM	Gathering security policies
+11/8/2020 8:57:24 PM	Gather column encryption keys
+11/8/2020 8:57:24 PM	Gathering column master keys
+11/8/2020 8:57:24 PM	Gathering external data sources
+11/8/2020 8:57:24 PM	Gathering external file formats
+11/8/2020 8:57:24 PM	Gathering external tables
+11/8/2020 8:57:24 PM	Gathering extended properties
+11/8/2020 8:57:24 PM	Gathering credentials
+11/8/2020 8:57:24 PM	Gathering logins
+11/8/2020 8:57:24 PM	Gathering server audits
+11/8/2020 8:57:25 PM	Scanning project for duplicate elements
+11/8/2020 8:57:25 PM	Finished duplicate element processing
+11/8/2020 8:57:26 PM	Finished importing database.
+11/8/2020 8:57:26 PM	A summary of the import was saved to the following location: C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\Import Schema Logs\HR.Database_20201108065716.log
+11/8/2020 8:57:26 PM	Click Finish to continue...

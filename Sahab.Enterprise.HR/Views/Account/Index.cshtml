@@ -1,0 +1,131 @@
+﻿@model IEnumerable<HR.DTO.User.UserVM>
+
+@{
+    ViewBag.Title = "Users Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="page-header">
+    <h4 class="page-title">User/Employee List</h4>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Add User</h4>
+                    <a href="/user/add" class="btn btn-primary btn-round ml-auto">
+                        <i class="fa fa-plus"></i>
+                        Add User
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ImageUrl)
+                                </th>
+                                <th>
+                                    @Html.Display("Manager Name")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FullName)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </th>
+ 
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Salary)
+                                </th> 
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ImageUrl)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Manager.FullName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FullName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Salary)
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    <img width="50" height="50" src="@($"/f/pi?url={item.ImageUrl??string.Empty}")" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Manager.FullName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                 
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Salary)
+                                </td>
+
+                                <td>
+                                    <div   class="form-button-action">
+                                        <a  href="/user/edit/@item.Id" data-toggle=" " title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a  href="/user/delete?id=@item.Id" data-toggle=" " title="" class="btn btn-link btn-danger" data-original-title="Remove">
+                                            <i class="fa fa-times"></i>
+
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Datatables -->
+    <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
+    <!-- Azzara JS -->
+    <script src="../../assets/js/ready.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Add Row
+            $('#add-row').DataTable({
+                "pageLength": 5,
+            }); 
+        });
+    </script>
+}

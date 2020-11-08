@@ -1,0 +1,163 @@
+﻿@model IEnumerable<HR.DTO.Task.TaskVM>
+
+@{
+    ViewBag.Title = "My Task Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="page-header">
+    <h4 class="page-title">My Tasks List</h4>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Edit Task</h4>
+                     
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Modal -->	<!-- Modal -->
+                <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header no-bd">
+                                <h5 class="modal-title">
+                                    <span class="fw-mediumbold">
+                                        Edit
+                                    </span>
+                                    <span class="fw-light">
+                                        Task
+                                    </span>
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="form-container">
+
+                            </div>
+                            <div class="modal-footer no-bd">
+                                <button type="button" id="addRowButton" class="btn btn-primary">Edit</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <th>
+                                        @Html.DisplayFor(model => item.Description)
+                                    </th>
+                                    <th>
+                                        @if (item.StatusCode == 1)
+                                        {
+                                            <span class="badge badge-primary">In Progress</span>
+                                        }
+                                        else if (item.StatusCode == 2)
+                                        {
+                                            <span class="badge badge-success">Finished</span>
+                                        }
+                                        else  
+                                        {
+                                            <span class="badge badge-primary">Not Determined</span>
+                                        }
+                                    </th>
+                                    <td>
+                                        <div class="form-button-action">
+
+                                            <button data-index="@item.Id" data-toggle="modal" data-target="#addRowModal" type="button" title="" class="edit-new-task btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Datatables -->
+    <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
+    <script src="../../assets/js/ready.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+
+            // set datatable
+            $('#add-row').DataTable({
+                "pageLength": 5,
+            });
+
+            // get the form of the edit
+            $('.edit-new-task').click(function () {
+                ajaxManager.get(`/task/edit/${this.dataset["index"]}`, function (data) {
+                    $('#form-container').html(data);
+                }, function (err) { })
+            });
+
+            // remove the department
+            $(document).on('click', '.remove-task', function () {
+                var index = this.dataset['index'];
+                var self = $(this);
+
+                ajaxManager.get(`/task/delete/${index}`, function (data) {
+                    self.parent().parent().parent().remove();
+                }, function (err) { })
+            });
+
+            // add or edit the department
+            $('#addRowButton').click(function () {
+                // validate the form data
+                if (validator.form("#form-container > form")) {
+                    ajaxManager.postForm("", "#form-container > form", function (data) {
+                        window.location = window.location;
+                        $('#addRowModal').modal('hide');
+                    }, function (err) {
+                    })
+                }
+            });
+        });
+    </script>
+}

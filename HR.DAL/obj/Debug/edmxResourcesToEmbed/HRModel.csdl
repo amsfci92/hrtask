@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Sahab.Enterprise.HRModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="HREntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AspNetUsers" EntityType="Sahab.Enterprise.HRModel.AspNetUser" />
+    <EntitySet Name="Departments" EntityType="Sahab.Enterprise.HRModel.Department" />
+    <AssociationSet Name="FK_AspNetUsers_Department" Association="Sahab.Enterprise.HRModel.FK_AspNetUsers_Department">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AspNetUsers_Manager" Association="Sahab.Enterprise.HRModel.FK_AspNetUsers_Manager">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUser1" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <EntitySet Name="Tasks" EntityType="Sahab.Enterprise.HRModel.Task" />
+    <AssociationSet Name="FK_Task_AspNetUsers" Association="Sahab.Enterprise.HRModel.FK_Task_AspNetUsers">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Task" EntitySet="Tasks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Task_AspNetUsers1" Association="Sahab.Enterprise.HRModel.FK_Task_AspNetUsers1">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Task" EntitySet="Tasks" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Salary" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ImageUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="ManagerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="DepartementId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Department" Relationship="Sahab.Enterprise.HRModel.FK_AspNetUsers_Department" FromRole="AspNetUser" ToRole="Department" />
+    <NavigationProperty Name="AspNetUsers1" Relationship="Sahab.Enterprise.HRModel.FK_AspNetUsers_Manager" FromRole="AspNetUser" ToRole="AspNetUser1" />
+    <NavigationProperty Name="AspNetUser1" Relationship="Sahab.Enterprise.HRModel.FK_AspNetUsers_Manager" FromRole="AspNetUser1" ToRole="AspNetUser" />
+    <NavigationProperty Name="Tasks" Relationship="Sahab.Enterprise.HRModel.FK_Task_AspNetUsers" FromRole="AspNetUser" ToRole="Task" />
+    <NavigationProperty Name="Tasks1" Relationship="Sahab.Enterprise.HRModel.FK_Task_AspNetUsers1" FromRole="AspNetUser" ToRole="Task" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="AspNetUsers" Relationship="Sahab.Enterprise.HRModel.FK_AspNetUsers_Department" FromRole="Department" ToRole="AspNetUser" />
+  </EntityType>
+  <Association Name="FK_AspNetUsers_Department">
+    <End Type="Sahab.Enterprise.HRModel.Department" Role="Department" Multiplicity="1" />
+    <End Type="Sahab.Enterprise.HRModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUser">
+        <PropertyRef Name="DepartementId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AspNetUsers_Manager">
+    <End Type="Sahab.Enterprise.HRModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Sahab.Enterprise.HRModel.AspNetUser" Role="AspNetUser1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUser1">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Task">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="EmployeeId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ManagerId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+    <Property Name="StatusCode" Type="Byte" />
+    <NavigationProperty Name="AspNetUser" Relationship="Sahab.Enterprise.HRModel.FK_Task_AspNetUsers" FromRole="Task" ToRole="AspNetUser" />
+    <NavigationProperty Name="AspNetUser1" Relationship="Sahab.Enterprise.HRModel.FK_Task_AspNetUsers1" FromRole="Task" ToRole="AspNetUser" />
+  </EntityType>
+  <Association Name="FK_Task_AspNetUsers">
+    <End Type="Sahab.Enterprise.HRModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Sahab.Enterprise.HRModel.Task" Role="Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Task_AspNetUsers1">
+    <End Type="Sahab.Enterprise.HRModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+    <End Type="Sahab.Enterprise.HRModel.Task" Role="Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Task">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

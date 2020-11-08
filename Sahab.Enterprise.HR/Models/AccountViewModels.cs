@@ -64,11 +64,33 @@ namespace Sahab.Enterprise.HR.Models
 
     public class RegisterViewModel
     {
+        public string Id { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Required]
+        [Display(Name = "Manager Name")]
 
+        public string ManagerId { get; set; }
+
+        [Required]
+        [Display(Name = "Salary")]
+        public decimal Salary { get; set; }
+
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+
+        [Required]
+        [Display(Name = "Profile Image")]
+        public string ImageUrl { get; set; }
+         
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -79,6 +101,12 @@ namespace Sahab.Enterprise.HR.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        [Required]
+        [Display(Name = "Department")]
+        public int DepartmentId { get; set; }
+
+        public IEnumerable<System.Web.Mvc.SelectListItem> Employees { get; set; }
+        public IEnumerable<System.Web.Mvc.SelectListItem> Departments { get; set; }
     }
 
     public class ResetPasswordViewModel

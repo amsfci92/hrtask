@@ -1,0 +1,27 @@
+﻿@model HR.DTO.Task.TaskVM
+
+    <tr>
+        <th>
+            @Html.DisplayFor(model => Model.Name)
+        </th> 
+        <th>
+            @if (Model.StatusCode != null && Model.StatusCode == 1)
+            {
+                <span class="badge badge-primary">In Progress</span>
+            }
+            else if (Model.StatusCode != null && Model.StatusCode == 2)
+            {
+                <span class="badge badge-success">Finished</span> 
+            }
+        </th>
+        <td>
+            <div class="form-button-action">
+                <button data-index="@Model.Id" data-toggle="modal" data-target="#addRowModal" type="button" title="" class="edit-new-department btn btn-link btn-primary btn-lg" data-original-title="Edit Department">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <a data-deleteUrl="/task/delete/@Model.Id" data-toggle="tooltip" title="" class="btn btn-link btn-danger remove-department" data-original-title="Remove">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </td>
+    </tr>

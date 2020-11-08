@@ -1,0 +1,10 @@
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\bin\Debug\HR.DAL.dll.config
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\bin\Debug\HR.DAL.dll
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\bin\Debug\HR.DAL.pdb
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\bin\Debug\EntityFramework.dll
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\bin\Debug\EntityFramework.xml
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\obj\Debug\HR.DAL.csproj.CopyComplete
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\obj\Debug\HR.DAL.dll
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.DAL\obj\Debug\HR.DAL.pdb

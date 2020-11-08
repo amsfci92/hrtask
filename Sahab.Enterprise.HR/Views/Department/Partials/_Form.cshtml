@@ -1,0 +1,20 @@
+﻿@model HR.DTO.Department.DepartmentVM
+
+@{ 
+    Layout = null;
+    var isAdd = ViewBag.Add != null && ViewBag.Add == true?true: false;
+}
+<form @( isAdd? "action=/department/add" : "action=/department/edit") method="post">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group form-group-default">
+                <label>Name</label> 
+                @if (!isAdd)
+                {
+                    <input required type="hidden" name="Id" id="Id" value="@Model.Id"/>
+                }
+                <input required id="Name" name="Name" value="@(!isAdd ? Model.Name:"")" type="text" class="form-control" placeholder="fill name">
+            </div>
+        </div> 
+    </div>
+</form>

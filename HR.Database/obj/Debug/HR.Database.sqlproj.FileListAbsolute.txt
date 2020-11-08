@@ -1,0 +1,10 @@
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\bin\Debug\HR.Database.dacpac
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\bin\Debug\HR.Database.dll
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\bin\Debug\HR.Database.pdb
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\obj\Debug\HR.Database.sqlprojAssemblyReference.cache
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\obj\Debug\Model.xml
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\obj\Debug\refactor.xml
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\obj\Debug\postdeploy.sql
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\obj\Debug\predeploy.sql
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\obj\Debug\HR.Database.dll
+C:\Users\ali.shehata\source\repos\Sahab.Enterprise.HRTask\HR.Database\obj\Debug\HR.Database.pdb

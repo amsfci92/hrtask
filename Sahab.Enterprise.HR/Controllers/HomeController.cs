@@ -8,22 +8,16 @@ namespace Sahab.Enterprise.HR.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Main Page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
+            // view the auth home page
+            if (User.Identity.IsAuthenticated)
+                return View("IndexAuth");
+            // view the default hpme page
             return View();
         }
     }

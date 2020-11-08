@@ -1,0 +1,142 @@
+﻿@model IEnumerable<HR.DTO.Task.TaskVM>
+
+@{
+    ViewBag.Title = "Task Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="page-header">
+    <h4 class="page-title">Tasks List</h4>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Add Task</h4> 
+                    <a href="/task/add"   class="btn btn-primary btn-round ml-auto"  >
+                        <i class="fa fa-plus"></i>
+                        Add Task
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+              
+                <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                         
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    Employee
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th style="width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    Status
+                                </th> 
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <th>
+                                    @Html.DisplayFor(model => item.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => item.Employee.FullName)
+                                </th>
+                                <th>
+                                    @if (item.StatusCode != null && item.StatusCode == 1)
+                                    {
+                                        <span class="badge badge-primary">In Progress</span>
+                                    }
+                                    else if (item.StatusCode != null && item.StatusCode == 2)
+                                    {
+                                        <span class="badge badge-success">Finished</span>
+
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-default">Not Determined</span>
+
+                                    }
+                                </th>
+                                <td>
+                                    <a data-index="@item.Id" data-toggle="tooltip" title="" class="remove-task btn btn-link btn-danger" data-original-title="Remove">
+                                        <i class="fa fa-times"></i> 
+                                    </a>
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Datatables -->
+    <script src="/content/assets/js/plugin/datatables/datatables.min.js"></script>
+    <script src="/content/assets/js/ready.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+
+            // set datatable
+            $('#add-row').DataTable({
+                "pageLength": 5,
+            });
+
+            // get the form of the edit 
+            $('.edit-new-task').click(function () {
+                ajaxManager.get(`/task/edit/${this.dataset["index"]}`, function (data) {
+                    $('#form-container').html(data);
+                }, function (err) { })
+            });
+
+            // remove the department
+            $('.remove-task').click(function () {
+                var index = this.dataset['index'];
+                var self = $(this);
+
+                ajaxManager.get(`/task/delete/${index}`, function (data) {
+                    self.parent().parent().parent().remove();
+                }, function (err) { })
+            });
+
+            // add or edit the department
+            $('#addRowButton').click(function () {
+                // validate the form data
+                if (validator.form("#form-container > form")) {
+                    ajaxManager.postForm("", "#form-container > form", function (data) {
+                        $('#add-row').append(data);
+                        $('#addRowModal').modal('hide');
+                    }, function (err) {
+                    })
+                }
+            });
+        });
+    </script>
+}

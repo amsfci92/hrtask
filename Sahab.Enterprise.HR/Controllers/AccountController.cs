@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
+using HR.BLL.Services.AspNetUserServ;
+using HR.BLL.Services.DepartmentServ;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Sahab.Enterprise.HR.Models;
@@ -13,13 +18,24 @@ using Sahab.Enterprise.HR.Models;
 namespace Sahab.Enterprise.HR.Controllers
 {
     [Authorize]
+    [RoutePrefix("user")]
     public class AccountController : Controller
     {
+
+        #region Fields
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public AccountController()
+        private IAspNetUserService _userService;
+        private IDepartmentService _departmentService;
+        #endregion
+
+        #region Ctor
+        public AccountController(IAspNetUserService userService,
+                 IDepartmentService departmentService)
         {
+            _userService = userService;
+            _departmentService = departmentService;
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -27,7 +43,9 @@ namespace Sahab.Enterprise.HR.Controllers
             UserManager = userManager;
             SignInManager = signInManager;
         }
-
+        #endregion
+     
+        #region Methods
         public ApplicationSignInManager SignInManager
         {
             get
@@ -52,20 +70,19 @@ namespace Sahab.Enterprise.HR.Controllers
             }
         }
 
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
+        [Route("Login")]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("Login")]
+
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -90,9 +107,29 @@ namespace Sahab.Enterprise.HR.Controllers
                     return View(model);
             }
         }
-
-        //
-        // GET: /Account/VerifyCode
+         
+        [Authorize]
+        [Route("")]
+        public async Task<ActionResult> Index(string id)
+        {
+            var users = _userService.GetUsersEmployeesList(id);
+            return View(users);
+        }
+         
+        [Authorize]
+        [Route("Delete")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var deleted = _userService.DeleteById(id);
+            if (deleted)
+            {
+                return RedirectToAction("Index");
+            }else
+            {
+                return HttpNotFound();
+            }
+        }
+          
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
@@ -103,9 +140,7 @@ namespace Sahab.Enterprise.HR.Controllers
             }
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
-
-        //
-        // POST: /Account/VerifyCode
+         
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -133,47 +168,134 @@ namespace Sahab.Enterprise.HR.Controllers
                     return View(model);
             }
         }
-
-        //
-        // GET: /Account/Register
-        [AllowAnonymous]
+         
+        [Authorize]
+        [Route("Add")] 
         public ActionResult Register()
         {
-            return View();
+            var employees = _userService.GetUsersEmployeesList();
+            var departments = _departmentService.GetAllDepartments();
+            
+            var user = new RegisterViewModel 
+            { 
+                Employees = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(employees),
+                Departments = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(departments)
+            };
+            return View(user);
         }
-
-        //
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
+         
+        [HttpPost] 
         [ValidateAntiForgeryToken]
+        [Route("Add")]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var departments = _departmentService.GetAllDepartments();
+            var employees = _userService.GetUsersEmployeesList();
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                
+                var user = new ApplicationUser 
+                { 
+                    UserName = model.Email, 
+                    Email = model.Email ,
+                    Salary = model.Salary,
+                    ImageUrl = model.ImageUrl,
+                    ManagerId = model.ManagerId,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DepartementId = model.DepartmentId
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
+                    // add the role Manager to the person whoe assigned as a manager
+                    if(UserManager.IsInRole(model.ManagerId, "Manager"))
+                    {
+                        UserManager.AddToRole(model.ManagerId, "Manager");
+                    }
+                    return RedirectToAction("Index", "User");
                 }
                 AddErrors(result);
             }
-
+            model.Employees = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(employees);
+            model.Departments = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(departments);
             // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //
-        // GET: /Account/ConfirmEmail
+        [Authorize]
+        [Route("Edit/{Id}")]
+        public ActionResult Edit(string Id)
+        {
+            var userDB = UserManager.FindById(Id);
+            if (userDB == null)
+                return HttpNotFound();
+
+            var employees = _userService.GetUsersEmployeesList();
+            var departments = _departmentService.GetAllDepartments();
+
+            var user = new RegisterViewModel
+            {
+                Password = "KLK@dkn#2@222kmd",
+                ConfirmPassword = "KLK@dkn#2@222kmd",
+                FirstName = userDB.FirstName,
+                LastName = userDB.LastName,
+                Email = userDB.Email,
+                Salary = userDB.Salary??0,
+                ManagerId = userDB.ManagerId,
+                DepartmentId = userDB.DepartementId,
+                ImageUrl = userDB.ImageUrl,
+                Employees = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(employees),
+                Departments = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(departments)
+            };
+            return View(user);
+        }
+ 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Edit")]
+        public async Task<ActionResult> Edit(RegisterViewModel model)
+        {
+            var departments = _departmentService.GetAllDepartments();
+            var employees = _userService.GetUsersEmployeesList();
+
+            if (ModelState.IsValid)
+            {
+
+
+                var user = await UserManager.FindByIdAsync(model.Id);
+
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.Salary = model.Salary;
+                user.ImageUrl = model.ImageUrl;
+                user.ManagerId = model.ManagerId;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.DepartementId = model.DepartmentId;
+                
+
+                var result = await UserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    // add the role Manager to the person whoe assigned as a manager
+                    if (UserManager.IsInRole(model.ManagerId, "Manager"))
+                    {
+                        UserManager.AddToRole(model.ManagerId, "Manager");
+                    } 
+                    return RedirectToAction("Index", "User");
+                }
+                AddErrors(result);
+            }
+            model.Employees = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(employees);
+            model.Departments = Mapper.Map<IEnumerable<System.Web.Mvc.SelectListItem>>(departments);
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+         
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -184,17 +306,13 @@ namespace Sahab.Enterprise.HR.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-
-        //
-        // GET: /Account/ForgotPassword
+         
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View();
         }
-
-        //
-        // POST: /Account/ForgotPassword
+         
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -220,25 +338,60 @@ namespace Sahab.Enterprise.HR.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //
-        // GET: /Account/ForgotPasswordConfirmation
+ 
         [AllowAnonymous]
+        [Route("F")]
         public ActionResult ForgotPasswordConfirmation()
         {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+
+            // In Startup iam creating first Admin Role and creating a default Admin User     
+            if (!roleManager.RoleExists("Admin"))
+            {
+
+                // first we create Admin rool    
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Admin";
+                roleManager.Create(role);
+
+                //Here we create a Admin super user who will maintain the website                   
+
+                var user = UserManager.FindByEmail("admin@sahab.com");
+                    var result1 = UserManager.AddToRole(user.Id, "Admin");
+
+            }
+            
+
+            // creating Creating Manager role     
+            if (!roleManager.RoleExists("Manager"))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Manager";
+                roleManager.Create(role);
+
+            }
+
+            // creating Creating Employee role     
+            if (!roleManager.RoleExists("Employee"))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Employee";
+                roleManager.Create(role);
+
+            }
             return View();
         }
-
-        //
-        // GET: /Account/ResetPassword
+ 
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
             return code == null ? View("Error") : View();
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -262,17 +415,13 @@ namespace Sahab.Enterprise.HR.Controllers
             AddErrors(result);
             return View();
         }
-
-        //
-        // GET: /Account/ResetPasswordConfirmation
+         
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
         }
 
-        //
-        // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -281,9 +430,7 @@ namespace Sahab.Enterprise.HR.Controllers
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
-
-        //
-        // GET: /Account/SendCode
+         
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
@@ -296,9 +443,7 @@ namespace Sahab.Enterprise.HR.Controllers
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
-
-        //
-        // POST: /Account/SendCode
+         
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -316,9 +461,7 @@ namespace Sahab.Enterprise.HR.Controllers
             }
             return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
-
-        //
-        // GET: /Account/ExternalLoginCallback
+         
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
@@ -346,9 +489,7 @@ namespace Sahab.Enterprise.HR.Controllers
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
-
-        //
-        // POST: /Account/ExternalLoginConfirmation
+         
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -384,9 +525,7 @@ namespace Sahab.Enterprise.HR.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
-
-        //
-        // POST: /Account/LogOff
+ 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
@@ -394,9 +533,7 @@ namespace Sahab.Enterprise.HR.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
-
-        //
-        // GET: /Account/ExternalLoginFailure
+         
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
@@ -422,6 +559,7 @@ namespace Sahab.Enterprise.HR.Controllers
 
             base.Dispose(disposing);
         }
+        #endregion
 
         #region Helpers
         // Used for XSRF protection when adding external logins

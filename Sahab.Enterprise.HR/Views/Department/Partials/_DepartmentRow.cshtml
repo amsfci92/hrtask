@@ -1,0 +1,23 @@
+﻿@model HR.DTO.Department.DepartmentVM
+
+    <tr>
+        <th>
+            @Html.DisplayFor(model => Model.Name)
+        </th>
+        <th>
+            @Model.Users.Count()
+        </th>
+        <th>
+            @Model.Users.Sum(m => m.Salary)
+        </th>
+        <td>
+            <div class="form-button-action">
+                <button data-index="@Model.Id"  data-toggle="modal" data-target="#addRowModal" type="button" title="" class="edit-new-department btn btn-link btn-primary btn-lg" data-original-title="Edit Department">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <a data-index="@Model.Id" data-toggle="tooltip" title="" class="btn btn-link btn-danger remove-department" data-original-title="Remove">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
